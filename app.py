@@ -18,8 +18,23 @@ def add_transaction(t_type, amount, note=""):
     conn.commit()
     conn.close()
 
+# ดึงข้อมูล
+def get_all_transactions():
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT type, amount, note, date
+        FROM transactions
+        ORDER BY date DESC
+    """)
+
+    rows = cursor.fetchall()
+    conn.close()
+    return rows
+
 # ตัวอย่างการใช้งาน
 if __name__ == "__main__":
-    add_transaction("income", 5000, "เงินเดือน")
-    add_transaction("expense", 120, "ข้าวกลางวัน")
-    print("เพิ่มข้อมูลเรียบร้อย")
+    data = get_all_transactions()
+    for t in data:
+        print(t)
