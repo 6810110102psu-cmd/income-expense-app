@@ -1,10 +1,17 @@
-from flask import Flask
+import sqlite3
 
-app = Flask(__name__)
+def init_db():
+    conn = sqlite3.connect("expense.db")
+    c = conn.cursor()
+    c.execute("""
+        CREATE TABLE IF NOT EXISTS transactions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            type TEXT,
+            amount REAL,
+            note TEXT
+        )
+    """)
+    conn.commit()
+    conn.close()
 
-@app.route("/")
-def home():
-    return "Income Expense App"
-
-if __name__ == "__main__":
-    app.run(debug=True)
+init_db()
